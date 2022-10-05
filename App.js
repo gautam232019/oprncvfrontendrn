@@ -72,10 +72,9 @@ const Main=({navigation}) =>{
   const uploadOutputImageAsync = async (base64Name,name) => {
     var base = base64Name.slice(2);
     var final = base.slice(0,-1);
-    // console.log(base);
+    
     var base64Icon = `data:image/jpg;base64,${final}`;
-    // var l = final.slice(-10);
-    // console.log(l);
+    
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function() {
@@ -106,7 +105,7 @@ const Main=({navigation}) =>{
       setLoading(true)
       const fileUri = `${FileSystem.documentDirectory}gautam`;
       const downloadedFile = await FileSystem.downloadAsync(link, fileUri);
-      // console.log(downloadedFile);
+    
       if (downloadedFile.status != 200) {
         handleError();
       }
@@ -117,11 +116,11 @@ const Main=({navigation}) =>{
         type: downloadedFile.headers['content-type'],
         name: "gautam.jpg"
        });
-      // console.log(formData);
+      
       
       Axios.post("http://3.17.62.240:80/image",formData)
       .then(res=>{
-        // console.log(res.data.output);
+        
         uploadImageAsync(fileUri,downloadedFile.headers['content-type']+'/input');
         uploadOutputImageAsync(res.data.output,downloadedFile.headers['content-type']+'/output');
         navigation.navigate("Home",
@@ -129,7 +128,7 @@ const Main=({navigation}) =>{
         )
         setLoading(false);
       }).catch(err=>{
-        // console.log(err);
+        
       })
     }
     else if(image){
@@ -141,11 +140,11 @@ const Main=({navigation}) =>{
         type: mime.getType(newImageUri),
         name: newImageUri.split("/").pop()
        });
-      // console.log(formData);
+      
       
       Axios.post("http://3.17.62.240:80/image",formData)
       .then(res=>{
-        // console.log(res.data.output);
+        
         uploadImageAsync(newImageUri,newImageUri.split("/").pop()+"/input");
         uploadOutputImageAsync(res.data.output,newImageUri.split("/").pop()+'/output');
         navigation.navigate("Home",
@@ -153,7 +152,7 @@ const Main=({navigation}) =>{
         )
         setLoading(false);
       }).catch(err=>{
-        // console.log(err);
+        
       })
     }
     else{
@@ -174,7 +173,7 @@ const Main=({navigation}) =>{
   }, []);
 
   const openCamera = async () => {
-    // Ask the user for the permission to access the camera
+    
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
     if (permissionResult.granted === false) {
@@ -184,12 +183,11 @@ const Main=({navigation}) =>{
 
     const result = await ImagePicker.launchCameraAsync();
 
-    // Explore the result
-    // console.log(result);
+   
 
     if (!result.cancelled) {
       setImage(result);
-      // console.log(result);
+      
       alert('Image selected')
     }
   }
@@ -202,7 +200,6 @@ const Main=({navigation}) =>{
     });
     if (!result.cancelled) {
       setImage(result);
-      // console.log(result);
       alert('Image is uploaded');
     }
   };
@@ -217,15 +214,6 @@ const Main=({navigation}) =>{
     <View style={styles.container}>
         <Text style={styles.mainTitle}>Plotline Assesment</Text>
       <View style={styles.inputView}>
-        {/* <Picker
-          selectedValue={val}
-          onValueChange={(itemValue,itemIndex) => setVal(itemValue)}> */}
-          {/* <Picker.Item label="Select Season" value={1} /> */}
-          {/* <Picker.Item label="Growing" value="Growing" /> */}
-          {/* <Picker.Item label="Harvesting" value="Harvesting" /> */}
-          {/* <Picker.Item label="Season3" value={4} /> */}
-        {/* </Picker> */}
-        {/* <Text style={styles.mainTitle}></Text> */}
         <TextInput
          style={{height:60}}
          placeholder="Please enter image link"
@@ -250,25 +238,12 @@ const Main=({navigation}) =>{
 const Home = (props) =>{
   var base = props.route.params.output.slice(2);
   base.slice(0,-1);
-  // console.log(base);
   var base64Icon = `data:image/png;base64,${base}`;
-  // console.log(base64Icon);
   return(
   <View style={{flex:1,flexDirection:'column',alignItems:'center',backgroundColor:'#003f5c'}}>
     <Text style={styles.resultTitle}>PLOTLINE</Text>
   
       {base && <Image source={{ uri: base64Icon }} style={{ width: '90%',height:500,marginTop:50,borderWidth:10,borderColor:'white',borderRadius:10 }} />}
-      {/* {props.route.params.output.map((x,i)=>(<Text style={{fontSize:25,marginTop:40,
-  fontWeight:'bold',
-  color:'white'}} key={i}>  {`> ${x}`}</Text>))} */}
-    {/* <Text style={{fontSize:30,marginTop:40,
-    marginBottom:20,
-  fontWeight:'bold',
-  color:'white'}}>Condition of the crop</Text> */}
-
-  {/* <Text style={{fontSize:25,marginTop:10,
-  fontWeight:'bold',
-  color:'white'}}>{props.route.params.output}</Text> */}
   </View>
   )
 }
